@@ -33,7 +33,6 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
         Fortify::authenticateUsing(function (Request $request) {
             $user = User::where('email', $request->email)->first();
 
@@ -44,18 +43,28 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         Fortify::createUsersUsing(CreateNewUser::class);
+
         Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
+
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
+
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
+
+        Fortify::requestPasswordResetLinkView(function () {
+            return env('FORTIFY_PASSWORD_RESET_LINK_VIEW');
+        });
+
+        Fortify::twoFactorChallengeView(function () {
+            return env('FORTIFY_TWO_FACTOR_CHALLENGE_VIEW');
+        });
 
         RateLimiter::for('login', function (Request $request) {
             $email = (string)$request->email;
-
-            return Limit::perMinute(15)->by($email . $request->ip());
+            return Limit::perMinute(10)->by($email . $request->ip());
         });
 
         RateLimiter::for('two-factor', function (Request $request) {
-            return Limit::perMinute(15)->by($request->session()->get('login.id'));
+            return Limit::perMinute(10)->by($request->session()->get('login.id'));
         });
 
     }

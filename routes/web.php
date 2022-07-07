@@ -1,26 +1,20 @@
 <?php
 
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
 */
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get("email/verify/{id}/{hash}", [VerificationController::class, '__invoke'])
+        ->middleware(["signed", "throttle:6,1"])
+        ->name("verification.verify");
 
-Route::get('/', function () {
-    return view('pages.home');
+    Route::get('user', [UserController::class, 'user'])->name('user');
+    Route::get('user/sessions', [UserController::class, 'sessions'])->name('user.sessions');
 });
 
-Route::get('/login', function () {
-    return view('pages.login');
-})->name('login');
-
-Route::get('/dashboard', function () {
-    return view('pages.dashboard');
-});

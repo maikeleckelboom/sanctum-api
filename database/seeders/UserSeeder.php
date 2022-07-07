@@ -21,8 +21,7 @@ class UserSeeder extends Seeder
             return;
 
         $administrator = UserFactory::new([
-            'given_name' => config('seeding.given_name', 'Developer'),
-            'family_name' => config('seeding.family_name', 'Matrix'),
+            'name' => config('seeding.name', 'Maikel Eckelboom'),
             'password' => Hash::make(config('seeding.password', 'Pa$$word!')),
             'email' => config('seeding.email', 'admin@account.com'),
         ])->create();
