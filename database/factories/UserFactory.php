@@ -19,6 +19,7 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
+            'username' => $this->faker->unique()->userName,
             'name' => $this->faker->firstName . ' ' . $this->faker->lastName,
             'profile_photo_path' => $this->faker->filePath(),
             'email' => $this->faker->unique()->safeEmail(),
